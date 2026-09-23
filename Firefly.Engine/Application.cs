@@ -56,14 +56,15 @@ namespace Firefly.Engine
             -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
         };
 
-        Shader shader;
         private int _width = 700, _height = 500;
+        Shader shader;
         Camera camera;
         InputManager input = new();
-        public int VBO, VAO, EBO;
+        Mesh mesh;
+        
         float deltaTime;
 
-        public Application(string title, int width, int height) : base(GameWindowSettings.Default, new NativeWindowSettings() { Size = (width, height), Title = title})
+        public Application(string title, int width, int height) : base(GameWindowSettings.Default, new NativeWindowSettings() { Size = (width, height), Title = title })
         {
             shader = new Shader("./Shaders/shader.vert", "./Shaders/shader.frag");
             _width = width;
@@ -72,8 +73,6 @@ namespace Firefly.Engine
 
         ~Application()
         {
-            GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
-            GL.DeleteBuffer(VBO);
         }
         // Movement speed (units per second)
         float moveSpeed = 5f;
@@ -123,6 +122,8 @@ namespace Firefly.Engine
         {
             base.OnLoad();
 
+            mesh = new Mesh(vertices);
+
             shader.PrintInfo();
 
             texture1 = new Texture2D("./Shaders/Assets/Texture.png");
@@ -131,17 +132,6 @@ namespace Firefly.Engine
             camera = new Camera(_width, _height);
 
 
-            VBO = GL.GenBuffer();
-            GL.BindBuffer(BufferTarget.ArrayBuffer, VBO);
-            GL.BufferData(BufferTarget.ArrayBuffer, vertices.Length * sizeof(float), vertices, BufferUsageHint.StaticDraw);
-
-            VAO = GL.GenVertexArray();
-            GL.BindVertexArray(VAO);
-
-            GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 5 * sizeof(float), 0);
-            GL.EnableVertexAttribArray(0);
-            GL.VertexAttribPointer(1, 2, VertexAttribPointerType.Float, false, 5 * sizeof(float), 3 * sizeof(float));
-            GL.EnableVertexAttribArray(1);
 
             shader.Use();
 
@@ -169,7 +159,7 @@ namespace Firefly.Engine
             camera.Use(shader);
             camera.Update();
 
-            GL.BindVertexArray(VAO);
+            mesh.Bind();
             double currentTime = stopwatch.Elapsed.TotalSeconds;
             deltaTime = (float)(currentTime - lastTime);
             Matrix4 model = Matrix4.CreateRotationY((float)MathHelper.DegreesToRadians(_rotationAngle));
@@ -206,9 +196,6 @@ namespace Firefly.Engine
         {
             texture1.Dispose();
             texture2.Dispose();
-            GL.DeleteBuffer(VBO);
-            GL.DeleteVertexArray(VAO);
-            GL.DeleteBuffer(EBO);
             base.OnUnload();
         }
     }
