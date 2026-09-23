@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Firefly.Engine.Graphics
 {
-    internal class Mesh
+    public class Mesh
     {
         public int VBO, VAO, EBO;
 

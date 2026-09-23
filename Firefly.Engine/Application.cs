@@ -1,5 +1,6 @@
 ﻿using Firefly.Engine.Graphics;
 using Firefly.Engine.Input;
+using Firefly.Engine.Scene;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
@@ -69,14 +70,20 @@ namespace Firefly.Engine
             shader = new Shader("./Shaders/shader.vert", "./Shaders/shader.frag");
             _width = width;
             _height = height;
+            camera = new Camera(_width, _height);
+            CursorState = CursorState.Grabbed;
+            WindowState = WindowState.Maximized;
         }
 
         ~Application()
         {
         }
-        // Movement speed (units per second)
         float moveSpeed = 5f;
+        private Vector2 lastMousePosition;
+        private float yaw = -90f;
+        private float pitch = 0f;
 
+        private float mouseSensitivity = 0.15f;
         protected override void OnUpdateFrame(FrameEventArgs args)
         {
             base.OnUpdateFrame(args);
@@ -85,30 +92,51 @@ namespace Firefly.Engine
 
             if (input.IsKeyPressed(Keys.Escape)) Close();
 
-            // Use the delta time from FrameEventArgs (this is the correct one for updates)
             float dt = (float)args.Time;
 
-            // Build a direction vector
+            // =========================
+            // Mouse Look
+            // =========================
+
+            Vector2 mouseDelta = input.MouseDelta;
+
+            float mouseSensitivity = 0.15f;
+
+            yaw += mouseDelta.X * mouseSensitivity;
+            pitch -= mouseDelta.Y * mouseSensitivity;
+
+            pitch = MathHelper.Clamp(pitch, -89f, 89f);
+
+            Vector3 front;
+
+            front.X = MathF.Cos(MathHelper.DegreesToRadians(yaw)) *
+                      MathF.Cos(MathHelper.DegreesToRadians(pitch));
+
+            front.Y = MathF.Sin(MathHelper.DegreesToRadians(pitch));
+
+            front.Z = MathF.Sin(MathHelper.DegreesToRadians(yaw)) *
+                      MathF.Cos(MathHelper.DegreesToRadians(pitch));
+
+            camera.Front = Vector3.Normalize(front);
+
             Vector3 direction = Vector3.Zero;
 
-            // Horizontal movement (WASD)
-            if (input.IsKeyDown(Keys.W)) direction.Z -= 1f; // Forward
-            if (input.IsKeyDown(Keys.S)) direction.Z += 1f; // Backward
-            if (input.IsKeyDown(Keys.A)) direction.X -= 1f; // Left
-            if (input.IsKeyDown(Keys.D)) direction.X += 1f; // Right
+            if (input.IsKeyDown(Keys.W)) direction += camera.Front;
+            if (input.IsKeyDown(Keys.S)) direction -= camera.Front; 
+            if (input.IsKeyDown(Keys.A)) direction -= camera.Right; 
+            if (input.IsKeyDown(Keys.D)) direction += camera.Right;
 
-            // Vertical movement (Space = up, LeftControl = down)
-            if (input.IsKeyDown(Keys.Space)) direction.Y += 1f; // Up
-            if (input.IsKeyDown(Keys.LeftControl)) direction.Y -= 1f; // Down
+            if (input.IsKeyDown(Keys.Space)) direction.Y += 1f;
+            if (input.IsKeyDown(Keys.LeftControl)) direction.Y -= 1f; 
 
-            // Normalize so diagonal movement isn't faster
             if (direction != Vector3.Zero)
             {
                 direction.Normalize();
 
-                // Optional: sprint with LeftShift
                 float speed = moveSpeed;
-                if (input.IsKeyPressed(Keys.LeftShift)) speed *= 3f;
+
+                if (input.IsKeyDown(Keys.LeftShift))
+                    speed *= 3f;
 
                 camera.Position += direction * speed * dt;
             }
@@ -118,18 +146,20 @@ namespace Firefly.Engine
 
         Texture2D texture1;
         Texture2D texture2;
+        SceneObject cube;
         protected override void OnLoad()
         {
             base.OnLoad();
 
             mesh = new Mesh(vertices);
+            cube = new SceneObject(mesh, shader);
 
             shader.PrintInfo();
 
             texture1 = new Texture2D("./Shaders/Assets/Texture.png");
             texture2 = new Texture2D("./Shaders/Assets/wall.jpg");
 
-            camera = new Camera(_width, _height);
+            
 
 
 
@@ -162,18 +192,11 @@ namespace Firefly.Engine
             mesh.Bind();
             double currentTime = stopwatch.Elapsed.TotalSeconds;
             deltaTime = (float)(currentTime - lastTime);
-            Matrix4 model = Matrix4.CreateRotationY((float)MathHelper.DegreesToRadians(_rotationAngle));
 
-
-
-
-
-
-            shader.SetMatrix4("model", model);
+            cube.Draw(camera);
 
 
             GL.DrawArrays(PrimitiveType.Triangles, 0, 36);
-            //GL.DrawElements(PrimitiveType.Triangles, indices.Length, DrawElementsType.UnsignedInt, 0);
             SwapBuffers();
 
             _rotationAngle += 50.0f * deltaTime;

@@ -1,6 +1,6 @@
-﻿using OpenTK.Windowing.Common;
+﻿using OpenTK.Mathematics;
+using OpenTK.Windowing.Common;
 using OpenTK.Windowing.GraphicsLibraryFramework;
-using System.Numerics;
 
 namespace Firefly.Engine.Input
 {
@@ -53,6 +53,8 @@ namespace Firefly.Engine.Input
 
         public bool IsMouseButtonReleased(MouseButton button) =>
             _mouse.IsButtonReleased(button);
+
+        
 
     }
 }

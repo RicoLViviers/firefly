@@ -5,8 +5,9 @@ namespace Firefly.Engine.Graphics
     public class Camera
     {
         public Vector3 Position = new Vector3(0.0f, 0.0f, 3.0f);
-        private Vector3 cameraFront = new Vector3(0.0f, 0.0f, -1.0f);
-        private Vector3 cameraUp = Vector3.UnitY;
+        public Vector3 Front = new Vector3(0.0f, 0.0f, -1.0f);
+        private Vector3 Up = Vector3.UnitY;
+        public Vector3 Right;
 
         Matrix4 projection;
         private Matrix4 view;
@@ -15,10 +16,10 @@ namespace Firefly.Engine.Graphics
         {
             Width = width;
             Height = height;
-            Vector3 cameraTarget = Vector3.Zero;
-            Vector3 cameraDirection = Vector3.Normalize(Position - cameraTarget);
-            Vector3 cameraRight = Vector3.Normalize(Vector3.Cross(cameraUp, cameraDirection));
-            Vector3 realCameraUp = Vector3.Cross(cameraDirection, cameraRight);
+            Vector3 Target = Vector3.Zero;
+            Vector3 Direction = Vector3.Normalize(Position - Target);
+            Right = Vector3.Normalize(Vector3.Cross(Front, Direction));
+            Vector3 realCameraUp = Vector3.Cross(Direction, Right);
             UpdateProjection();
             UpdateView();
         }
@@ -30,12 +31,13 @@ namespace Firefly.Engine.Graphics
 
         private void UpdateView()
         {
-            view = Matrix4.LookAt(Position, Position + cameraFront, cameraUp);
+            view = Matrix4.LookAt(Position, Position + Front, Up);
         }
 
         public void Update()
         {
             UpdateView();
+            Right = Vector3.Normalize(Vector3.Cross(Front, Up));
         }
         public void Use(Shader shader)
         {
