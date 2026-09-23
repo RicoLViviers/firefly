@@ -1,4 +1,5 @@
 ﻿using Firefly.Engine.Graphics;
+using OpenTK.Graphics.OpenGL4;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -24,7 +25,20 @@ namespace Firefly.Engine.Scene
 
         public void Draw(Camera camera)
         {
+            Shader.Use();
+
+            camera.Use(Shader);
+            camera.Update();
+
             Shader.SetMatrix4("model", Transform.GetMatrix());
+
+            Mesh.Bind();
+
+            GL.DrawArrays(
+                PrimitiveType.Triangles,
+                0,
+                Mesh.VertexCount
+            );
         }
     }
 }

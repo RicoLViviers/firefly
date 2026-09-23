@@ -8,9 +8,12 @@ namespace Firefly.Engine.Graphics
     public class Mesh
     {
         public int VBO, VAO, EBO;
+        public int VertexCount;
 
         public Mesh(float[] vertices)
         {
+            VertexCount = vertices.Length / 5;
+
             VBO = GL.GenBuffer();
             VAO = GL.GenVertexArray();
 
@@ -27,6 +30,9 @@ namespace Firefly.Engine.Graphics
 
         public Mesh(float[] vertices, int[] indices)
         {
+            VertexCount = vertices.Length / 5;
+
+
             VBO = GL.GenBuffer();
             VAO = GL.GenVertexArray();
             EBO = GL.GenBuffer();
