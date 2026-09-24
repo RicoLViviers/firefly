@@ -175,7 +175,7 @@ namespace Firefly.Sandbox
             sphere.Transform.Position += rigidBody.Velocity * deltaTime;
         }
 
-        protected override void Render()
+        protected override void Render(float deltaTime)
         {
             GL.Clear(
                 ClearBufferMask.ColorBufferBit |
