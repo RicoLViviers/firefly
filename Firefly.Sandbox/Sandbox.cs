@@ -22,6 +22,7 @@ namespace Firefly.Sandbox
         private readonly Texture2D texture1;
         private readonly Texture2D texture2;
         private readonly List<SceneObject> objects = [];
+        private readonly RigidBody rigidBody = new();
 
         private float yaw = -90f;
         private float pitch = 0f;
@@ -167,6 +168,11 @@ namespace Firefly.Sandbox
 
                 camera.Position += direction * speed * deltaTime;
             }
+
+
+            rigidBody.Update(deltaTime);
+
+            sphere.Transform.Position += rigidBody.Velocity * deltaTime;
         }
 
         protected override void Render()
