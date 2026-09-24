@@ -6,16 +6,16 @@ internal static class Program
 {
     static void Main()
     {
-        NativeWindowSettings windowSettings = new NativeWindowSettings()
+        NativeWindowSettings windowSettings = new()
         {
-            Size = new OpenTK.Mathematics.Vector2i(800, 600),
+            ClientSize = new OpenTK.Mathematics.Vector2i(800, 600),
             Title = "Anti-Aliasing Example",
             // Set the number of MSAA samples (e.g., 4 or 8)
             NumberOfSamples = 4
         };
 
 
-        using Sandbox sandbox = new Sandbox(GameWindowSettings.Default, windowSettings);
+        using Sandbox sandbox = new(GameWindowSettings.Default, windowSettings);
         sandbox.Run();
     }
 }

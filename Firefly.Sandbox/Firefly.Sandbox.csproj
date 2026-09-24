@@ -12,7 +12,7 @@
   </PropertyGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="xcopy &quot;$(SolutionDir)Shaders\*.*&quot; &quot;$(TargetDir)Shaders\&quot; /E /Y /I" />
+    <Exec Command="xcopy &quot;$(ProjectDir)Shaders\*.*&quot; &quot;$(TargetDir)Shaders\&quot; /E /Y /I" />
   </Target>
 
 </Project>
