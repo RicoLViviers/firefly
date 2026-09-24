@@ -6,20 +6,19 @@ namespace Firefly.Engine.Graphics.Primitives
     {
         private static readonly float[] Vertices =
         [
-            // Position              // UV
-            -0.5f, 0.0f, -0.5f,     0.0f, 0.0f,
-             0.5f, 0.0f, -0.5f,     1.0f, 0.0f,
-             0.5f, 0.0f,  0.5f,     1.0f, 1.0f,
+            -0.5f, 0.0f, -0.5f,   0.0f, 1.0f, 0.0f,
+             0.5f, 0.0f, -0.5f,   0.0f, 1.0f, 0.0f,
+             0.5f, 0.0f,  0.5f,   0.0f, 1.0f, 0.0f,
 
-             0.5f, 0.0f,  0.5f,     1.0f, 1.0f,
-            -0.5f, 0.0f,  0.5f,     0.0f, 1.0f,
-            -0.5f, 0.0f, -0.5f,     0.0f, 0.0f
+             0.5f, 0.0f,  0.5f,   0.0f, 1.0f, 0.0f,
+            -0.5f, 0.0f,  0.5f,   0.0f, 1.0f, 0.0f,
+            -0.5f, 0.0f, -0.5f,   0.0f, 1.0f, 0.0f
         ];
 
-        public static SceneObject Create(Shader shader)
+        public static SceneObject Create(string name, Material material)
         {
             Mesh mesh = new(Vertices);
-            return new SceneObject(mesh, shader);
+            return new SceneObject(name, mesh, material);
         }
     }
 }

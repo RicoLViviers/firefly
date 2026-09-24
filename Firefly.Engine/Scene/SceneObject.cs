@@ -8,14 +8,16 @@ namespace Firefly.Engine.Scene
 {
     public class SceneObject
     {
-        public Transform Transform { get; } = new Transform();
-        public Mesh Mesh;
-        public Shader Shader;
+        public string Name;
+        public Transform Transform = new Transform();
+        private Mesh Mesh;
+        public Material Material;
 
-        public SceneObject(Mesh mesh, Shader shader)
+        public SceneObject(string name, Mesh mesh, Material material)
         {
+            Name = name;
             Mesh = mesh;
-            Shader = shader;
+            Material = material;
         }
 
         public void Update(float deltaTime)
@@ -25,12 +27,12 @@ namespace Firefly.Engine.Scene
 
         public void Draw(Camera camera)
         {
-            Shader.Use();
+            Material.Apply();
 
-            camera.Use(Shader);
+            camera.Use(Material.Shader);
             camera.Update();
 
-            Shader.SetMatrix4("model", Transform.GetMatrix());
+            Material.Shader.SetMatrix4("model", Transform.GetMatrix());
 
             Mesh.Bind();
 

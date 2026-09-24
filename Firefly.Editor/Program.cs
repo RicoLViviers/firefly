@@ -10,8 +10,7 @@ internal static class Program
         {
             StartVisible = false,
             ClientSize = new OpenTK.Mathematics.Vector2i(800, 600),
-            Title = "Anti-Aliasing Example",
-            NumberOfSamples = 4
+            Title = "Firefly Editor"
         };
 
 
