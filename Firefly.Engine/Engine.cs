@@ -13,7 +13,7 @@ namespace Firefly.Engine
 
         protected abstract void Initialize();
         protected abstract void Update(float deltaTime);
-        protected abstract void Render();
+        protected abstract void Render(float deltaTime);
 
         protected override void OnLoad()
         {
@@ -24,13 +24,13 @@ namespace Firefly.Engine
         protected override void OnUpdateFrame(FrameEventArgs args)
         {
             base.OnUpdateFrame(args);
-            Update(((float)args.Time));
+            Update((float)args.Time);
         }
 
         protected override void OnRenderFrame(FrameEventArgs args)
         {
             base.OnRenderFrame(args);
-            Render();
+            Render((float)args.Time);
         }
     }
 }

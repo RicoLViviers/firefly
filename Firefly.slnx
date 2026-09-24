@@ -1,4 +1,5 @@
 <Solution>
+  <Project Path="Firefly.Editor/Firefly.Editor.csproj" Id="b20a86fc-1cc2-475c-aab2-f6bd6a1dfdb5" />
   <Project Path="Firefly.Engine/Firefly.Engine.csproj" />
   <Project Path="Firefly.Sandbox/Firefly.Sandbox.csproj" Id="dce78613-243f-4781-b081-a1d7ec55c4f0" />
 </Solution>
