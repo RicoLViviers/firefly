@@ -23,9 +23,6 @@ namespace Firefly.Sandbox
         private readonly Texture2D texture2;
         private readonly List<SceneObject> objects = [];
         private readonly RigidBody rigidBody = new();
-
-        private float yaw = -90f;
-        private float pitch = 0f;
         private readonly float moveSpeed = 5f;
         SceneObject sphere;
 
@@ -111,31 +108,14 @@ namespace Firefly.Sandbox
             if (input.IsKeyPressed(Keys.Escape))
                 Close();
 
-            // Mouse look
-
             Vector2 mouseDelta = input.MouseDelta;
 
-            yaw += mouseDelta.X * 0.15f;
-            pitch -= mouseDelta.Y * 0.15f;
+            camera.Yaw += mouseDelta.X * 0.15f;
+            camera.Pitch -= mouseDelta.Y * 0.15f;
 
-            pitch = MathHelper.Clamp(pitch, -89f, 89f);
+            camera.Pitch = MathHelper.Clamp(camera.Pitch, -89f, 89f);
 
-            Vector3 front;
-
-            front.X =
-                MathF.Cos(MathHelper.DegreesToRadians(yaw)) *
-                MathF.Cos(MathHelper.DegreesToRadians(pitch));
-
-            front.Y =
-                MathF.Sin(MathHelper.DegreesToRadians(pitch));
-
-            front.Z =
-                MathF.Sin(MathHelper.DegreesToRadians(yaw)) *
-                MathF.Cos(MathHelper.DegreesToRadians(pitch));
-
-            camera.Front = Vector3.Normalize(front);
-
-            // Movement
+            camera.Update();
 
             Vector3 direction = Vector3.Zero;
 
@@ -152,10 +132,10 @@ namespace Firefly.Sandbox
                 direction += camera.Right;
 
             if (input.IsKeyDown(Keys.Space))
-                direction.Y += 1f;
+                direction += Vector3.UnitY;
 
             if (input.IsKeyDown(Keys.LeftControl))
-                direction.Y -= 1f;
+                direction -= Vector3.UnitY;
 
             if (direction != Vector3.Zero)
             {
@@ -169,6 +149,7 @@ namespace Firefly.Sandbox
                 camera.Position += direction * speed * deltaTime;
             }
 
+            camera.Update();
 
             rigidBody.Update(deltaTime);
 
@@ -187,7 +168,6 @@ namespace Firefly.Sandbox
             shader.Use();
 
             camera.Use(shader);
-            camera.Update();
 
             foreach (SceneObject obj in objects)
             {
