@@ -23,7 +23,7 @@ namespace Firefly.Sandbox
         private readonly Texture2D texture2;
         private readonly List<SceneObject> objects = [];
         private readonly RigidBody rigidBody = new();
-        private readonly float moveSpeed = 5f;
+        private readonly float moveSpeed = 3f;
         SceneObject sphere;
 
 
@@ -77,26 +77,26 @@ namespace Firefly.Sandbox
 
             foreach (Vector3 position in positions)
             {
-                SceneObject cube = Cube.Create(shader);
+                SceneObject cube = Cube.Create("Cube", shader);
 
                 cube.Transform.Position = position;
                 objects.Add(cube);
             }
 
-            SceneObject floor = Plane.Create(shader);
+            SceneObject floor = Plane.Create("Floor", shader);
 
             floor.Transform.Position = new Vector3(0, -1, 0);
             floor.Transform.Scale = new Vector3(10, 1, 10);
 
             objects.Add(floor);
 
-            SceneObject pyramid = Pyramid.Create(shader);
+            SceneObject pyramid = Pyramid.Create("Pyramid", shader);
             pyramid.Transform.Position = new Vector3(2, 0, -3);
 
             objects.Add(pyramid);
 
 
-            sphere = Sphere.Create(shader);
+            sphere = Sphere.Create("Sphere", shader);
             sphere.Transform.Position = new(-1, 1, -2);
             objects.Add(sphere);
         }
@@ -110,8 +110,8 @@ namespace Firefly.Sandbox
 
             Vector2 mouseDelta = input.MouseDelta;
 
-            camera.Yaw += mouseDelta.X * 0.15f;
-            camera.Pitch -= mouseDelta.Y * 0.15f;
+            camera.Yaw += mouseDelta.X * 0.04f;
+            camera.Pitch -= mouseDelta.Y * 0.04f;
 
             camera.Pitch = MathHelper.Clamp(camera.Pitch, -89f, 89f);
 

@@ -9,9 +9,7 @@ internal static class Program
         NativeWindowSettings windowSettings = new()
         {
             ClientSize = new OpenTK.Mathematics.Vector2i(800, 600),
-            Title = "Anti-Aliasing Example",
-            // Set the number of MSAA samples (e.g., 4 or 8)
-            NumberOfSamples = 4
+            Title = "Sandbox"
         };
 
 

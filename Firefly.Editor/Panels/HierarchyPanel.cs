@@ -1,54 +1,47 @@
-﻿using ImGuiNET;
+﻿using Firefly.Engine.Scene;
+using ImGuiNET;
 
 namespace Firefly.Editor.Panels
 {
     internal class HierarchyPanel
     {
-
-
-        public void Render(float deltaTime)
+        public SceneObject SelectedObject;
+        public void Render(float deltaTime, Scene scene)
         {
-            ImGui.Begin("Firefly Editor");
+            ImGui.Begin("Hierarchy");
 
-            ImGuiTreeNodeFlags baseFlags = ImGuiTreeNodeFlags.OpenOnArrow | ImGuiTreeNodeFlags.SpanAvailWidth;
+            ImGuiTreeNodeFlags baseFlags =
+                ImGuiTreeNodeFlags.OpenOnArrow |
+                ImGuiTreeNodeFlags.SpanAvailWidth;
 
             if (ImGui.TreeNodeEx("World Scene", baseFlags))
             {
-                if (ImGui.TreeNodeEx("Environment", baseFlags))
+                foreach (SceneObject obj in scene.Objects)
                 {
-                    ImGui.TreeNodeEx("Directional Light", baseFlags | ImGuiTreeNodeFlags.Leaf);
-                    ImGui.TreePop();
+                    ImGuiTreeNodeFlags flags = baseFlags;
 
-                    ImGui.TreeNodeEx("Skybox", baseFlags | ImGuiTreeNodeFlags.Leaf);
-                    ImGui.TreePop();
-
-                    ImGui.TreePop();
-                }
-
-                if (ImGui.TreeNodeEx("Player Entity", baseFlags))
-                {
-                    if (ImGui.TreeNodeEx("Main Camera", baseFlags))
+                    if (SelectedObject == obj)
                     {
-                        ImGui.TreeNodeEx("Camera Component", baseFlags | ImGuiTreeNodeFlags.Leaf);
-                        ImGui.TreePop();
-
-                        ImGui.TreePop();
+                        flags |= ImGuiTreeNodeFlags.Selected;
                     }
 
-                    ImGui.TreeNodeEx("Player Controller", baseFlags | ImGuiTreeNodeFlags.Leaf);
-                    ImGui.TreePop();
+                    bool open = ImGui.TreeNodeEx(obj.Name, flags);
 
-                    ImGui.TreePop();
+                    if (ImGui.IsItemClicked())
+                    {
+                        SelectedObject = obj;
+                    }
+
+                    if (open)
+                    {
+                        ImGui.TreePop();
+                    }
                 }
-
-                ImGui.TreeNodeEx("Terrain Mesh", baseFlags | ImGuiTreeNodeFlags.Leaf);
-                ImGui.TreePop();
 
                 ImGui.TreePop();
             }
 
             ImGui.End();
-
         }
     }
 }
