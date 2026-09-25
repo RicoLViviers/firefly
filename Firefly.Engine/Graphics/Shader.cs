@@ -5,7 +5,7 @@ namespace Firefly.Engine.Graphics
 {
     public class Shader
     {
-        public int Handle;
+        private int Handle;
 
         public Shader(string vertexPath, string fragmentPath)
         {
@@ -84,7 +84,22 @@ namespace Firefly.Engine.Graphics
 
         public void SetMatrix4(string name, Matrix4 matrix)
         {
-            GL.UniformMatrix4(GetUniformLocation(name), true, ref matrix);
+            int location = GL.GetUniformLocation(Handle, name);
+            GL.UniformMatrix4(location, true, ref matrix);
+        }
+
+        public void SetFloat(string name, float value)
+        {
+            int location = GL.GetUniformLocation(Handle, name);
+
+            GL.Uniform1(location, value);
+        }
+
+        public void SetVec3(string name, Vector3 value)
+        {
+            int location = GL.GetUniformLocation(Handle, name);
+
+            GL.Uniform3(location, value);
         }
 
 

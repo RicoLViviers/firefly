@@ -8,8 +8,10 @@ namespace Firefly.Editor.Camera
         public Engine.Graphics.Camera Camera { get; }
 
         public float MoveSpeed { get; set; } = 2.0f;
-        public float LookSensitivity { get; set; } = 0.1f;
+        public float LookSensitivity { get; set; } = 0.2f;
         public float FastMultiplier { get; set; } = 3.0f;
+        public float PanSensitivity { get; set; } = 0.005f;
+        public float ScrollSpeed { get; set; } = 0.2f;
 
         private float _yaw = -90.0f;
         private float _pitch = 0.0f;
@@ -28,7 +30,14 @@ namespace Firefly.Editor.Camera
             if (!hovered)
                 return;
 
-            // Unity-style fly mode only while RMB is held
+            UpdateScroll(mouse);
+
+            if (mouse.IsButtonDown(MouseButton.Middle))
+            {
+                UpdatePan(mouse);
+                return;
+            }
+
             if (!mouse.IsButtonDown(MouseButton.Right))
                 return;
 
@@ -47,6 +56,22 @@ namespace Firefly.Editor.Camera
 
             Camera.Yaw = _yaw;
             Camera.Pitch = _pitch;
+        }
+
+        private void UpdatePan(MouseState mouse)
+        {
+            Vector2 delta = mouse.Delta;
+
+            Camera.Position -= Camera.Right * delta.X * PanSensitivity;
+            Camera.Position += Camera.Up * delta.Y * PanSensitivity;
+        }
+
+        private void UpdateScroll(MouseState mouse)
+        {
+            float scroll = mouse.ScrollDelta.Y;
+
+            if (scroll != 0)
+                Camera.Position += Camera.Front * scroll * ScrollSpeed;
         }
 
         private void UpdateMovement(float deltaTime, KeyboardState keyboard)
@@ -68,7 +93,6 @@ namespace Firefly.Editor.Camera
             if (keyboard.IsKeyDown(Keys.A))
                 Camera.Position -= Camera.Right * speed;
 
-            // Unity-style Q/E vertical movement
             if (keyboard.IsKeyDown(Keys.E))
                 Camera.Position += Vector3.UnitY * speed;
 
