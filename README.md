@@ -24,7 +24,8 @@
 
 Firefly is a C# game engine designed for developers who wants to quickly prototype games. Built on top of OpenTK, Firefly provides a clean, idiomatic C# API for rendering, input, audio, and scene management so you can focus on building your game.
 <br>
-<img width="1365" height="715" alt="image" src="https://github.com/user-attachments/assets/ac711ae8-1eaf-4f3f-a58e-a2a028b99c8a" />
+<img width="1365" height="719" alt="image" src="https://github.com/user-attachments/assets/67ba7dc8-4025-43b4-ad70-886c22d25878" />
+
 
 ---
 
