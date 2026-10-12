@@ -11,8 +11,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="xcopy &quot;$(ProjectDir)Shaders\*.*&quot; &quot;$(TargetDir)Shaders\&quot; /E /Y /I" />
-  </Target>
+  <ItemGroup>
+    <None Include="Shaders/**/*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 
 </Project>
