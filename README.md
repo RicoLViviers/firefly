@@ -37,7 +37,6 @@ Firefly is a C# game engine designed for developers who wants to quickly prototy
 - A GPU supporting **OpenGL 4.6** (or 3.3+ for the compatibility profile)
 
 ### Compiling from source
-**better guide coming soon**
 - Open the `Firefly.slnx` in visual studio
 - Build the project from there
 
@@ -50,5 +49,3 @@ Firefly Engine is released under the MIT License. See [LICENSE](LICENSE) for det
 - OpenTK
 - OpenGL
 - ImGui
-
-The open-source community for inspiration and reference implementations
